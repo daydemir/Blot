@@ -5,7 +5,7 @@ var formJSON = helper.formJSON;
 var model = Template.metadataModel;
 var save = Template.update;
 
-var writeToFolder = require('../../../modules/template').writeToFolder;
+var writeToFolder = Template.writeToFolder;
 var loadTemplate = require('./loadTemplate');
 var loadSidebar = require('./loadSidebar');
 var error = require('./error');
@@ -81,7 +81,7 @@ module.exports = function (server) {
           // could we do something with this error? Could we wait to render the page?
         });
 
-        Blog.flushCache(req.blog.id, function(err){
+        Blog.set(req.blog.id, {cacheID: Date.now()}, function(err){
 
           if (err) return next(err);
 

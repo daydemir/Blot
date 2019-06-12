@@ -1,22 +1,17 @@
 var Express = require("express");
 var Delete = new Express.Router();
 var User = require("user");
-
+var Email = require("helper").email;
 var checkPassword = require("./util/checkPassword");
 var logout = require("./util/logout");
 var async = require("async");
 
-var helper = require("helper");
-var localPath = helper.localPath;
 var Blog = require("blog");
 var pretty = require("helper").prettyPrice;
 
 var User = require("user");
-var removeFolder = helper.upload.removeFolder;
 var config = require("config");
 var stripe = require("stripe")(config.stripe.secret);
-var clients = require("clients");
-var fs = require("fs-extra");
 
 Delete.route("/blog/:handle")
 
@@ -42,7 +37,7 @@ Delete.route("/blog/:handle")
   .post(
     checkPassword,
     function(req, res, next) {
-      deleteBlog(req.blogToDelete.id, next);
+      Blog.remove(req.blogToDelete.id, next);
     },
     calculateSubscriptionChange,
     decreaseSubscription,
@@ -112,60 +107,18 @@ Delete.route("/")
     deleteBlogs,
     deleteSubscription,
     deleteUser,
+    emailUser,
     logout,
     function(req, res) {
-      res.redirect("/deleted");
+      res.redirect("/account/deleted");
     }
   );
 
-function deleteBlog(blogID, callback) {
-  Blog.get({ id: blogID }, function(err, blog) {
-    if (err) return callback(err);
-
-    // All of these functions take the blogID as
-    // first argument and callback as second.
-    var queue = [
-      removeFolder,
-      function(blogID, done) {
-        fs.emptyDir(localPath(blogID, ""), done);
-      },
-      Blog.remove,
-      updateUser
-    ];
-
-    if (blog.client) {
-      queue.push(clients[blog.client].disconnect);
-    }
-
-    async.applyEach(queue, blog.id, callback);
-  });
+function emailUser(req, res, next) {
+  Email.DELETED("", req.user, next);
 }
-
 function deleteBlogs(req, res, next) {
-  async.series(
-    req.user.blogs.map(function(blogID) {
-      return deleteBlog.bind(this, blogID);
-    }),
-    next
-  );
-}
-
-function updateUser(blogID, callback) {
-  Blog.get({ id: blogID }, function(err, blog) {
-    if (err) return callback(err);
-
-    User.getById(blog.owner, function(err, user) {
-      if (err) return callback(err);
-
-      var blogs = user.blogs.slice();
-
-      blogs = blogs.filter(function(otherBlogID) {
-        return otherBlogID !== blogID;
-      });
-
-      User.set(blog.owner, { blogs: blogs }, callback);
-    });
-  });
+  async.each(req.user.blogs, Blog.remove, next);
 }
 
 function deleteUser(req, res, next) {
@@ -189,6 +142,8 @@ function decreaseSubscription(req, res, next) {
 
       User.set(req.user.uid, { subscription: subscription }, function(err) {
         if (err) return next(err);
+
+        Email.SUBSCRIPTION_DECREASE(req.user.uid);
 
         next();
       });

@@ -1,12 +1,13 @@
 var client = require("client");
 var Redlock = require("redlock");
-var buildFromFolder = require("../modules/template").update;
+var buildFromFolder = require("template").buildFromFolder;
 var Blog = require("blog");
 var Update = require("./update");
 var localPath = require("helper").localPath;
 var async = require("async");
 var renames = require("./renames");
 var exitHook = require("async-exit-hook");
+var debug = require('debug')('blog:sync');
 
 // By default, we give a sync process up to
 // 10 minutes to compete before we allow other
@@ -19,12 +20,12 @@ var DEFAULT_TTL = 10 * 60 * 1000;
 var locks = {};
 
 exitHook(function(callback) {
-  console.log("Unlocking all locks...");
+  debug("Unlocking all locks...");
 
   async.eachOf(
     locks,
     function(lock, blogID, next) {
-      console.log("Unlocking", blogID, "...");
+      debug("Unlocking", blogID, "...");
       lock.unlock(next);
     },
     callback
@@ -118,11 +119,7 @@ function sync(blogID, options, callback) {
               Blog.set(blogID, { cacheID: Date.now() }, function(err) {
                 if (err) return callback(err);
 
-                Blog.flushCache(blogID, function(err) {
-                  if (err) return callback(err);
-
-                  callback(syncError);
-                });
+                callback(syncError);
               });
             });
           });
