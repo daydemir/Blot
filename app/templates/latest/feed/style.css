@@ -136,12 +136,12 @@ div {
 .header hr {
   flex-grow: 1;
   flex-basis: 2em;
-  border-color: #000;
-  margin: 0 0.325rem
+  border-color: #eee;
+  margin: 0 0.65rem
 }
 
 .header hr.spacer {
-  max-width: 3em
+  max-width: 0.65rem;
 }
 
 .header a {
@@ -195,7 +195,6 @@ div {
 
 .margin p {
   font-style: italic;
-  font-family: Georgia;
   font-size: 0.9em;
   margin-top: 0
 }
@@ -271,7 +270,6 @@ div {
 
 p,
 li {
-  font-family: Georgia, serif;
   position: relative;
   margin: 24px 0;
   font-size: 17px
