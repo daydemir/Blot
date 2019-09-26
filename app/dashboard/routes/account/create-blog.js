@@ -136,7 +136,10 @@ function validateSubscription(req, res, next) {
     !subscription.status ||
     subscription.status !== "active"
   ) {
-    res.redirect("/account");
+    res.message(
+      "/account/subscription/create",
+      new Error("You need an active subscription to create a new blog")
+    );
   } else {
     next();
   }
@@ -248,8 +251,7 @@ function updateSubscription(req, res, next) {
       User.set(req.user.uid, { subscription: subscription }, function(err) {
         if (err) return next(err);
 
-        Email.SUBSCRIPTION_INCREASE(req.user.uid);
-
+        Email.CREATED_BLOG(req.user.uid);
         next();
       });
     }
