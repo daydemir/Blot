@@ -71,7 +71,7 @@ label[for="toggle"] {
   display: block;
   position: relative;
   cursor: pointer !important;
-  color: #a09d9c;
+  color: #777;
   line-height: 1.5;
   font-size: 15px;
   text-decoration: none;

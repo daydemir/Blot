@@ -33,7 +33,7 @@
 
     <input type="checkbox" name="toggle" id="toggle">
 
-    <ul class="sidebar col-25" style="border-right: 2px solid #ddd;padding: 1rem;width: 16rem;margin: 2rem">
+    <ul class="sidebar col-25" style="min-height:90vh;border-right: 2px solid #ddd;padding: 1rem;width: 16rem;margin: 2rem">
 
 {{#unless user}}
         <a class="underline-on-hover {{selected.index}}" style="font-weight: 600;color:#000" title="Blot" href="/" >Blot</a>
@@ -91,6 +91,7 @@
         <li><a class="{{selected.contact}}" href="/contact">Contact</a></li>
         <hr>
                 <li class="with-arrow"><a class="{{selected.developers}}" href="/developers">Developers</a></li>
+                <li class="with-arrow"><a class="{{selected.notes}}" href="/notes">Notes</a></li>
 
     </ul>
 
@@ -98,9 +99,11 @@
       <br>
       {{{body}}}
     </content>
-    <ul style="border-left: 2px solid #ddd;padding: 2rem;margin: 2rem">
+    <ul style="border-left: 2px solid #ddd;padding: 2rem 4rem;margin: 2rem;width:10rem;">
       {{#unless user}}
         <a class="buttt" href="/sign-up">Sign up</a>
+        <br>
+        <br>
         <a class="buttt" href="/log-in">Log in</a>
         {{/unless}}
         {{#if user}}
