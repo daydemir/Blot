@@ -1,0 +1,77 @@
+<style type="text/css">
+	.menu-wrapper {position: sticky;top:0;
+		display: flex;justify-content: center;}
+	.menu {
+		display: inline-flex;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-shadow: 0 0 16px #eee;
+		transition: width 2s, height 4s;
+	}
+
+	.menu .show-search form {
+		display: block;
+	}
+
+	.menu a {
+		color: inherit;
+		padding: 0.2em 0.4em;		
+		border-left: 1px solid #ccc;
+		text-decoration: none;
+		position: relative;
+	}
+
+	.menu a:first-child {border-left: none;}
+	.menu a:active {
+		opacity: 0.9;
+	}
+
+	.menu a .bold {visibility: hidden;font-weight: 500;}
+
+	.menu a.active .bold,
+	.menu a:active .bold,
+	.menu a:focus .bold
+	 {visibility: visible;}
+
+	.menu a.active .unbold,
+	.menu a:active .unbold,
+	.menu a:focus .unbold {display: none;}
+
+	.menu a .unbold {position:absolute;left:0;right:0;text-align: center;}
+</style>
+
+<div class="menu-wrapper">
+<div class="menu show-search">
+	<a href="/">{{title}}</a>
+	<form action="/search">
+		<input type="text" autofocus placeholder="Search">
+	</form>
+	{{#popular_tags}}
+	<a href="/tagged/{{{slug}}}" class="{{active}}">
+		<span class="unbold">{{tag}}</span>
+		<span class="bold">{{tag}}</span>
+	</a>
+	{{/popular_tags}}
+	{{#menu}}
+	<a href="{{{url}}}" class="{{active}}">
+		<span class="unbold">{{label}}</span>
+		<span class="bold">{{label}}</span>
+	</a>
+	{{/menu}}
+</div>
+</div>
+
+<script type="text/javascript">
+	
+	var searchLink = document.querySelector('.menu a[href="/search"]');
+	var menu = document.querySelector('.menu');
+	searchLink.onclick = function(e){
+		menu.className = menu.className.split('show-search').join('');
+		document.querySelectorAll('.menu a').forEach(function(node){
+			node.style.display = 'none';
+		})
+		e.preventDefault();
+		return false;
+	}
+
+</script>

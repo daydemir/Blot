@@ -1,0 +1,8 @@
+{
+	"name": "Components",
+	"views": {
+		"archives.html": {
+			"url": "/archives"
+		}
+	}
+}

@@ -1,0 +1,65 @@
+<style type="text/css">
+
+	.menu {
+		display: inline-flex;
+		position: sticky;
+		top: 0;
+		width: 100%;
+		border-bottom: 1px solid #ccc;
+		box-shadow: 0 5px 6px rgba(0,0,0,0.05);
+		border-radius: 4px;
+		font-size: 13px
+	}
+
+	.menu a {
+		color: inherit;
+		padding: 0.5em 0.8em;		
+		text-decoration: none;
+		position: relative;
+	}
+
+
+	.menu a:active {
+		opacity: 0.9;
+	}
+
+	.menu a .bold {visibility: hidden;font-weight: 500;}
+
+	.menu a.active .bold,
+	.menu a:active .bold,
+	.menu a:focus .bold
+	 {visibility: visible;}
+
+	.menu a.active .unbold,
+	.menu a:active .unbold,
+	.menu a:focus .unbold {display: none;}
+
+	.menu a .unbold {position:absolute;left:0;right:0;text-align: center;}
+</style>
+
+<div class="menu">
+	<a href="/">{{title}}</a>
+	{{#popular_tags}}
+	<a href="/tagged/{{{slug}}}" class="{{active}}">
+		<span class="unbold">{{tag}}</span>
+		<span class="bold">{{tag}}</span>
+	</a>
+	{{/popular_tags}}
+	{{#menu}}
+	<a href="{{{url}}}" class="{{active}}">
+		<span class="unbold">{{label}}</span>
+		<span class="bold">{{label}}</span>
+	</a>
+	{{/menu}}
+</div>
+
+<script type="text/javascript">
+	
+	var searchLink = document.querySelector('.menu a[href="/search"]');
+	searchLink.onClick = function(e){
+
+		e.preventDefault();
+		return false;
+	}
+
+</script>
