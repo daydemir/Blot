@@ -56,6 +56,7 @@ describe("metadata parser", function () {
     ).toEqual({
       permalink: "hey",
       page: "yes",
+      date: "2022-03-02"
     });
   });
 
