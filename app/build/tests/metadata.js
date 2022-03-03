@@ -48,8 +48,6 @@ describe("metadata parser", function () {
     });
   });
 
-
-
   it("handles colons", function () {
     expect(
       Metadata(
@@ -70,9 +68,23 @@ describe("metadata parser", function () {
     });
   });
 
+  
+
   it("handles spaces in the metadata key", function () {
     expect(Metadata(["Author name: Jason"].join("\n")).metadata).toEqual({
       "author name": "Jason",
+    });
+  });
+  
+  it("handles metadata value list", function () {
+    expect(Metadata(["Tags: Meta, Documentation"].join("\n")).metadata).toEqual({
+      "tags": ["meta", "documentation"],
+    });
+  });
+
+  it("handles spaces in the metadata value list", function () {
+    expect(Metadata(["List: Getting started, Documentation"].join("\n")).metadata).toEqual({
+      "List": "getting started, documentation",
     });
   });
 
