@@ -48,6 +48,17 @@ describe("metadata parser", function () {
     });
   });
 
+  it("parses YAML metadata with date", function () {
+    expect(
+      Metadata(
+        ["---", "Page: yes", "Permalink: hey", "Date: 2022-03-02", "---", "", "# Hi"].join("\n")
+      ).metadata
+    ).toEqual({
+      permalink: "hey",
+      page: "yes",
+    });
+  });
+
 
 
   it("handles colons", function () {
