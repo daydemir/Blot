@@ -48,20 +48,6 @@ describe("metadata parser", function () {
     });
   });
 
-  it("parses YAML metadata with date", function () {
-    expect(
-      Metadata(
-        ["---", "Page: yes", "Permalink: hey", "Date: 2022-03-02", "---", "", "# Hi"].join("\n")
-      ).metadata
-    ).toEqual({
-      permalink: "hey",
-      page: "yes",
-      date: "2022-03-02"
-    });
-  });
-
-
-
   it("handles colons", function () {
     expect(
       Metadata(
@@ -82,9 +68,24 @@ describe("metadata parser", function () {
     });
   });
 
+  
+
   it("handles spaces in the metadata key", function () {
     expect(Metadata(["Author name: Jason"].join("\n")).metadata).toEqual({
       "author name": "Jason",
+    });
+  });
+
+  
+  it("handles metadata value list", function () {
+    expect(Metadata(["Tags: Meta, Documentation"].join("\n")).metadata).toEqual({
+      "tags": ["meta", "documentation"],
+    });
+  });
+
+  it("handles spaces in the metadata value list", function () {
+    expect(Metadata(["Tags: Getting started, Documentation"].join("\n")).metadata).toEqual({
+      "tags": ["getting started", "documentation"],
     });
   });
 
