@@ -75,7 +75,6 @@ describe("metadata parser", function () {
       "author name": "Jason",
     });
   });
-
   
   it("handles metadata value list", function () {
     expect(Metadata(["Tags: Meta, Documentation"].join("\n")).metadata).toEqual({
@@ -84,8 +83,8 @@ describe("metadata parser", function () {
   });
 
   it("handles spaces in the metadata value list", function () {
-    expect(Metadata(["Tags: Getting started, Documentation"].join("\n")).metadata).toEqual({
-      "tags": ["getting started", "documentation"],
+    expect(Metadata(["List: Getting started, Documentation"].join("\n")).metadata).toEqual({
+      "List": "getting started, documentation",
     });
   });
 
